@@ -1353,6 +1353,17 @@ function Index() {
           </div>
         </footer>
       )}
+
+      <Tutorial
+        open={showTutorial}
+        onOpenChange={setShowTutorial}
+        onFinish={() => {
+          if (!user) return;
+          try {
+            localStorage.setItem(`tutorial-seen:${user.id}`, "1");
+          } catch {}
+        }}
+      />
     </div>
   );
 }
