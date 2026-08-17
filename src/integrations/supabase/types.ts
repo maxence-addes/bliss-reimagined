@@ -164,6 +164,7 @@ export type Database = {
     }
     Functions: {
       consume_invite_code: { Args: { _code: string }; Returns: undefined }
+      ensure_profile: { Args: never; Returns: undefined }
       find_profile_by_invite_code: {
         Args: { _code: string }
         Returns: {
@@ -180,6 +181,7 @@ export type Database = {
           id: string
         }[]
       }
+      is_parent_of: { Args: { _child: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
