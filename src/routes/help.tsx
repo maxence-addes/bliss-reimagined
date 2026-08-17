@@ -27,6 +27,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Tutorial } from "@/components/tutorial";
+import { PlayCircle } from "lucide-react";
 
 const STARTER_STEPS = [
   {
@@ -121,6 +123,7 @@ function HelpPage() {
   const navigate = useNavigate();
   const [openGuide, setOpenGuide] = useState(false);
   const [openTips, setOpenTips] = useState(false);
+  const [openTutorial, setOpenTutorial] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
@@ -138,6 +141,16 @@ function HelpPage() {
         </p>
 
         <section className="grid sm:grid-cols-2 gap-3 mb-8">
+          <button
+            onClick={() => setOpenTutorial(true)}
+            className="text-left rounded-2xl border border-border bg-card p-5 hover:border-primary/60 hover:bg-accent/40 transition-colors sm:col-span-2"
+          >
+            <PlayCircle className="w-5 h-5 mb-3 text-primary" />
+            <p className="font-medium">Revoir le tutoriel</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Le tour d'introduction pas à pas, disponible à tout moment.
+            </p>
+          </button>
           <button
             onClick={() => setOpenGuide(true)}
             className="text-left rounded-2xl border border-border bg-card p-5 hover:border-primary/60 hover:bg-accent/40 transition-colors"
@@ -159,6 +172,8 @@ function HelpPage() {
             </p>
           </button>
         </section>
+
+        <Tutorial open={openTutorial} onOpenChange={setOpenTutorial} />
 
         <Dialog open={openGuide} onOpenChange={setOpenGuide}>
           <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">

@@ -87,10 +87,14 @@ import { cn } from "@/lib/utils";
 import { useTheme } from "@/hooks/use-theme";
 import { ChildStats } from "@/components/child-stats";
 import { StreakFlame } from "@/components/streak-flame";
+import { Tutorial } from "@/components/tutorial";
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
+
+// Comptes créés avant cette date = anciens utilisateurs : pas de tutoriel auto.
+const TUTORIAL_RELEASE_DATE = new Date("2026-08-17T00:00:00Z").getTime();
 
 const DAY_LABELS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 const WEEKDAY_PICKER = [
@@ -109,6 +113,7 @@ function Index() {
   const navigate = useNavigate();
   const [studentMode, setStudentMode] = useState(false);
   const [hasOnboarded, setHasOnboarded] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
   const [profession, setProfession] = useState<string | null>(null);
   const [children, setChildren] = useState<{ id: string; display_name: string | null }[]>([]);
   const [selectedChild, setSelectedChild] = useState<{ id: string; display_name: string | null } | null>(null);
@@ -175,7 +180,7 @@ function Index() {
       // Load profile to know whether the quiz has already been completed.
       const { data: profile } = await supabase
         .from("profiles")
-        .select("onboarded_at, profession")
+        .select("onboarded_at, profession, created_at")
         .eq("id", user.id)
         .maybeSingle();
       if (cancelled) return;
@@ -187,6 +192,20 @@ function Index() {
           try { localStorage.setItem(`student-mode-active:${user.id}`, "1"); } catch {}
         }
       }
+
+      // Tutoriel de bienvenue : uniquement pour les nouveaux comptes, une seule fois.
+      try {
+        const seen = localStorage.getItem(`tutorial-seen:${user.id}`) === "1";
+        const isNewUser =
+          !!profile?.created_at &&
+          new Date(profile.created_at).getTime() >= TUTORIAL_RELEASE_DATE;
+        if (!seen && isNewUser) {
+          setShowTutorial(true);
+        } else if (!seen) {
+          // Ancien utilisateur : on marque le tutoriel comme déjà vu.
+          localStorage.setItem(`tutorial-seen:${user.id}`, "1");
+        }
+      } catch {}
 
       if (profile?.profession === "parent") {
         const { data: kids } = await supabase.rpc("get_my_children");
@@ -1334,6 +1353,17 @@ function Index() {
           </div>
         </footer>
       )}
+
+      <Tutorial
+        open={showTutorial}
+        onOpenChange={setShowTutorial}
+        onFinish={() => {
+          if (!user) return;
+          try {
+            localStorage.setItem(`tutorial-seen:${user.id}`, "1");
+          } catch {}
+        }}
+      />
     </div>
   );
 }

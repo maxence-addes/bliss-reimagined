@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -164,9 +164,6 @@ function LoginPage() {
           >
             {mode === "signin" ? "Inscription" : "Connexion"}
           </button>
-        </p>
-        <p className="text-center text-xs text-muted-foreground mt-4">
-          <Link to="/" className="hover:underline">← Retour</Link>
         </p>
       </div>
     </div>
