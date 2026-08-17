@@ -163,8 +163,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      ensure_profile: { Args: never; Returns: undefined }
-      is_parent_of: { Args: { _child: string }; Returns: boolean }
       consume_invite_code: { Args: { _code: string }; Returns: undefined }
       ensure_profile: { Args: never; Returns: undefined }
       find_profile_by_invite_code: {
