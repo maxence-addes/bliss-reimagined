@@ -22,11 +22,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s);
       setLoading(false);
+      if (s?.user) {
+        setTimeout(() => {
+          void supabase.rpc("ensure_profile");
+        }, 0);
+      }
     });
 
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       setLoading(false);
+      if (data.session?.user) void supabase.rpc("ensure_profile");
     });
 
     return () => subscription.unsubscribe();
