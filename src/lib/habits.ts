@@ -1,8 +1,22 @@
-export type Schedule =
+export type HabitAlarm = {
+  /** Heure de l'habitude au format HH:MM */
+  time: string;
+  /** Minutes avant l'heure de l'habitude où l'alarme sonne */
+  leadMinutes: number;
+};
+
+export type Schedule = (
   | { type: "daily" }
   | { type: "weekly"; weekdays: number[] }
   | { type: "once"; dates: string[] }
-  | { type: "deadline"; dueDate: string };
+  | { type: "deadline"; dueDate: string }
+) & { alarm?: HabitAlarm };
+
+export const describeAlarm = (a?: HabitAlarm | null): string => {
+  if (!a) return "";
+  if (!a.leadMinutes) return `Alarme à ${a.time}`;
+  return `Alarme ${a.leadMinutes} min avant ${a.time}`;
+};
 
 export type Habit = {
   id: string;
