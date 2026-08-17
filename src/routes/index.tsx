@@ -168,6 +168,9 @@ function Index() {
   const [newWeekdays, setNewWeekdays] = useState<number[]>([1, 2, 3, 4, 5]);
   const [newDates, setNewDates] = useState<Date[]>([]);
   const [newDueDate, setNewDueDate] = useState<Date | undefined>(undefined);
+  const [newAlarmEnabled, setNewAlarmEnabled] = useState(false);
+  const [newAlarmTime, setNewAlarmTime] = useState("08:00");
+  const [newAlarmLead, setNewAlarmLead] = useState(10);
 
   useEffect(() => {
     if (authLoading) return;
@@ -438,6 +441,9 @@ function Index() {
     } else if (newScheduleType === "deadline") {
       if (!newDueDate) return;
       schedule = { type: "deadline", dueDate: todayKey(newDueDate) };
+    }
+    if (newAlarmEnabled && newAlarmTime) {
+      schedule = { ...schedule, alarm: { time: newAlarmTime, leadMinutes: newAlarmLead } };
     }
     const detail = newDetail.trim() || "Quotidien";
     const name = newName.trim();

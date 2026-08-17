@@ -10,6 +10,7 @@ import {
 
 import { ThemeProvider } from "@/hooks/use-theme";
 import { AuthProvider } from "@/hooks/use-auth";
+import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -131,6 +132,7 @@ function RootComponent() {
       <AuthProvider>
         <ThemeProvider>
           <Outlet />
+          <Toaster />
         </ThemeProvider>
       </AuthProvider>
     </QueryClientProvider>
