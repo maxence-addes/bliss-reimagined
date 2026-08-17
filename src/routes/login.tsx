@@ -165,9 +165,6 @@ function LoginPage() {
             {mode === "signin" ? "Inscription" : "Connexion"}
           </button>
         </p>
-        <p className="text-center text-xs text-muted-foreground mt-4">
-          <Link to="/" className="hover:underline">← Retour</Link>
-        </p>
       </div>
     </div>
   );
